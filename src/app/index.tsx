@@ -1,98 +1,124 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import CustomInput from '@/components/custom-input';
+import { router } from 'expo-router';
+import { useState } from 'react';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Colors } from '../constants/colors';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+export default function LoginScreen() {
+  const [usuario, setUsuario] = useState('');
+  const [password, setPassword] = useState('');
+  const [usuarioError, setUsuarioError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const isFormValid = usuario.trim() == '' && password.trim().length >= 6;
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
+  const handleLogin = () => {
+    let isValid = true;
+
+    if(usuario.trim() === '') {
+      setUsuarioError('La matricula es obligatoria');
+      isValid = false;
+    }else{
+      setUsuarioError('');
+    }
+
+    if(password.trim() === ''){
+      setPasswordError('La contraseña es obligatoria');
+      isValid = false;
+    }else if(password.length < 6){
+      setPasswordError('Contraseña incompleta');
+      isValid = false;
+    }else{
+      setPasswordError('');
+    }
+
+    if (isValid){
+      router.replace('/(tabs)');
+    }
   }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
+    <View style= {styles.container}>
+        <View style={styles.logoContainer}>
+          <Image 
+          source = {require('../../assets/images/ittslogo.png')}
+          style = {styles.logo} 
+          resizeMode='contain'
+          />
+          <Text style={styles.institutionText}>
+            Bienvenido
+          </Text>
+        </View>
+
+        <View style={styles.form}>
+          <CustomInput
+            icon="person-outline"
+            placeholder="Usuario (Matricula)"
+            secureTextEntry = {false}
+            value={usuario}
+            onChangeText={setUsuario} 
+          />
+          {usuarioError && <Text>{usuarioError}</Text>}
+          <CustomInput
+            icon="key-outline"
+            placeholder="Contraseña"
+            secureTextEntry = {true}
+            value={password}
+            onChangeText={setPassword}
+          />
+          {passwordError && <Text>{passwordError}</Text>}
+          <Pressable
+            style={[styles.button, !isFormValid && styles.buttonDisabled]}
+            disabled = {!isFormValid}
+            onPress={handleLogin}>
+            
+            <Text style={styles.buttonText}>Entrar</Text>
+          </Pressable>
+        </View>
+    </View>
   );
 }
 
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
-  );
-}
 
 const styles = StyleSheet.create({
-  container: {
+    container: {
     flex: 1,
+    backgroundColor: Colors.background,
     justifyContent: 'center',
-    flexDirection: 'row',
+    paddingHorizontal: 30,
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
+  logoContainer: {
     alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+    marginBottom: 60,
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+  logo: {
+    width: 130,
+    height: 130,
   },
-  title: {
+  institutionText: {
+    color: Colors.goldAccent,
+    fontSize: 12,
     textAlign: 'center',
+    marginTop: 12,
+    fontWeight: '500',
   },
-  code: {
-    textTransform: 'uppercase',
+  form: {
+    width: '100%',
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
+  button: {
+  backgroundColor: Colors.primary,
+  height: 55,
+  borderRadius: 12,
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: 10,
+},
+buttonText: {
+  color: '#FFFFFF',
+  fontSize: 16,
+  fontWeight: '600',
+},
+buttonDisabled: {
+  backgroundColor: '#B0B0B0',
+},
 });
+
