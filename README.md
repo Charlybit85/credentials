@@ -22,7 +22,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 4. Start the app
 
    ```bash
-   npx expo start
+   bun expo start
    ```
 
 In the output, you'll find options to open the app in a
