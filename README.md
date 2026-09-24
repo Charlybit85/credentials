@@ -4,13 +4,22 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 ## Get started
 
-1. Install dependencies
+1. Verify your version of nodejs, in expo react native SDK57 use version 24.11.1 (for windows)
+   ```bash
+   nvm install 24.11.1   
+   ```
+2. For Linux
+   ```bash
+   nvm install 24  
+   ```
+
+3. Install dependencies
 
    ```bash
    npm install
    ```
 
-2. Start the app
+4. Start the app
 
    ```bash
    npx expo start
