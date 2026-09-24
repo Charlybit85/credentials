@@ -9,7 +9,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [usuarioError, setUsuarioError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const isFormValid = usuario.trim() == '' && password.trim().length >= 6;
+  const isFormValid = usuario.trim() !== '' && password.trim().length > 6;
 
   const handleLogin = () => {
     let isValid = true;
@@ -44,9 +44,7 @@ export default function LoginScreen() {
           style = {styles.logo} 
           resizeMode='contain'
           />
-          <Text style={styles.institutionText}>
-            Bienvenido
-          </Text>
+          <Text style={styles.institutionText}>Bienvenido</Text>
         </View>
 
         <View style={styles.form}>
@@ -57,7 +55,9 @@ export default function LoginScreen() {
             value={usuario}
             onChangeText={setUsuario} 
           />
-          {usuarioError && <Text>{usuarioError}</Text>}
+          {
+          usuarioError && <Text>{usuarioError}</Text>
+          }
           <CustomInput
             icon="key-outline"
             placeholder="Contraseña"
@@ -65,13 +65,17 @@ export default function LoginScreen() {
             value={password}
             onChangeText={setPassword}
           />
-          {passwordError && <Text>{passwordError}</Text>}
+          {
+          passwordError && <Text>{passwordError}</Text>
+          }
           <Pressable
             style={[styles.button, !isFormValid && styles.buttonDisabled]}
             disabled = {!isFormValid}
             onPress={handleLogin}>
             
-            <Text style={styles.buttonText}>Entrar</Text>
+            <Text style={styles.buttonText}>
+              Entrar
+            </Text>
           </Pressable>
         </View>
     </View>
@@ -88,15 +92,15 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 60,
+    marginBottom: 90,
   },
   logo: {
-    width: 130,
+    width: 190,
     height: 130,
   },
   institutionText: {
     color: Colors.goldAccent,
-    fontSize: 12,
+    fontSize: 20,
     textAlign: 'center',
     marginTop: 12,
     fontWeight: '500',
